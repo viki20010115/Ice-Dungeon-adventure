@@ -1,0 +1,60 @@
+def findDevice(dun):
+    find="" #Keeps track of what we found
+    way=[] #Keeps track of where we are
+    options=['left', 'forward', 'right'] #options of directions
+    i=0 #will check which directions we already tried
+    a=dun
+    
+    while find!="device": #go until we find the device
+        while type(a)!=str: #we only want to check what we found if it's a word
+            
+            try: #we try going in one direction
+                a=a[options[i]] #we choose whwre to go based on where we have been previously
+            except: #if cannot be excecuted, becasue we are at the end of the road but there is nothing
+                i+=1 #try the next option
+                if i==0 or i==1: #try another turn for the last one
+                    
+                    try:
+                        a=a[options[i]]
+                    except: #if still notworking
+                        i+=1 # try next option
+                        if i==2: #only if we started out with i=0
+                            
+                            try: #try last time
+                                a=a[options[i]]
+                            except: #we arrived to a dead-end
+                                i+=1 #set i to >2 to make while statement run
+                                while i>2: #so until we are at the end of the nodes...
+                                    where=options.index(way[-1]) #check which node we are at (not adding the step that was now not excecuted)
+                                    i=where+1 #go to the next node compared to that one, i will be set to 
+                                    way=way[:-1] # and getting rid of the node we now know does not lead to the treasure
+                            else: #if executed adds to the way 
+                                way.append(options[i])
+                                i=0 #and starts from the left again
+                                
+                        while i>2: #if we started out with i=1
+                            where=options.index(way[-1]) #dead-end, go back one node
+                            i=where+1 #try next road option
+                            way=way[:-1]      
+                    else:
+                        way.append(options[i])
+                        i=0
+                        
+                while i>2:
+                    where=options.index(way[-1])
+                    i=where+1
+                    way=way[:-1]
+            else:
+                way.append(options[i])
+                i=0        
+
+        find=a #found a word, store it
+        a=dun #create the path if it's not the word we wanted
+        if find!="device":
+            for x in range (0,len(way)-1):
+                a=a[way[x]] #create path
+            i=options.index(way[-1])+1 #sets index to the next number to check. If higher than 2, the above method will find it and adjust it.
+            way=way[:-1] #the last stop should be erased
+            
+    way.append(find)
+    return way
